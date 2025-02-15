@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        table, th, td {
+            border: 1px solid;
+            font-size: 14px;
+        }
+
+        td {
+            text-align:center;
+            padding: 0.5rem;
+        }
+    </style>
+    <title>연차제도</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div style="display: flex;">
+                <div class="navbar-brand">WTM</div>
+                <ul class="nav-ul">
+                    <li class="nav-item">
+                        <a href="/index">근무시간
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/leave" class="current-page">연차제도</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/absence">휴직/병가</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-info">
+                <%= name %>
+            </div>
+        </div>
+    </nav>
+
+    <!-- main -->
+        <div id="container">
+            <h2 style="margin-bottom: 2.0rem;">연차유급휴가</h2>
+            <div class="content-container">
+                <div style="margin-bottom:2.0rem;">
+                    <h3>1. 연차발생 규정</h3>
+                        <table style="border-collapse: collapse;">
+                            <tr>
+                                <th>구분</th>
+                                <th>발생</th>
+                                <th>소멸</th>
+                                <th>비고</th>
+                            </tr>
+
+                            <tr>
+                                <td>개근연차<br>(입사 1~2년차)</td>
+                                <td>입사 후 매 1개월 개근 시 1일<br>(최대 11일)</td>
+                                <td>입사 후 1년 되는 날<br>※ 현재 기준 다음해 연말까지 이월</td>
+                                <td>-</td>
+                            </tr>
+
+                            <tr>
+                                <td>비례연차<br>(입사 2년차)</td>
+                                <td>입사 후 1년 되는 시점에<br>전년도 근무기간에 비례하여 발생<br>(최대 15일)</td>
+                                <td>발생한 연도의 12/31</td>
+                                <td>(12/31 - 입사일) / 365 * 15<br>(소수점 첫째자리 반올림)</td>
+                            </tr>
+
+                            <tr>
+                                <td>연차<br>(입사 3년차 이후)</td>
+                                <td>최초 15일<br>매 2년마다 1일씩 증가</td>
+                                <td>발생한 연도의 12/31</td>
+                                <td>3년차 : 15일, 4-5년차 : 16일<br>6-7년차 : 17일 ㆍㆍㆍ</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                <div style="margin-bottom:2.0rem;">
+                    <h3>2. 연차계산기(2~4년차)</h3>
+                    <p>입사일 : <input type="date" id="date" onchange="getDate()"></p>
+                    <p>
+                        <span id="first-year">1년차 발생일 : </span>
+                        <span id="first-calculate"></span>
+                    <p>
+                        <span id="year-end">2년차 발생일 : </span>
+                        <span id="calculate"></span>
+                    </p>
+                    <p>
+                        <span id="3rd-year-end">3년차 발생일 : </span>
+                        <span id="3rd-calculate"></span>
+                    </p>
+                    <p>
+                        <span id="4th-year-end">4년차 발생일 : </span>
+                        <span id="4th-calculate"></span>
+                    </p>
+                        <span style="font-size:0.8rem;">※ 개근연차는 제외되었으며 1~2년차에 최대 11일의 개근연차 발생</span>
+                </div>
+                
+                <div style="margin-bottom:2.0rem;">
+                    <h3>3. 연차사용</h3>
+                    <ul>
+                        <li>근태프로그램에서 부서장 승인하에 사용</li>
+                        <li>연차 없을 시 근태담당자 문의 후 다음년도에 발생할 연차를 초과사용 가능</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom:2.0rem;">
+                    <h3>4. 퇴사 시 연차정산</h3>
+                    <ul>
+                        <li>2년차까지는 입사일 기준으로 계산 (즉, 몇 개를 사용했든 법적 기준으로 재정산)</li>
+                        <li>3년차부터는 1/1에 발생한 연차만큼 정산</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom:2.0rem;">
+                    <h3>5. 담당자</h3>
+                    <ul>
+                        <li>인사팀 인사G 장재호</li>
+                        <li>jangjh1@wonik.com</li>
+                        <li>010-8262-2209 / 031-8047-7602</li>
+                        <li>평택시 진위산단로75 8층</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function getDate() {
+                const join_date = new Date(document.getElementById("date").value);
+                const year_end = new Date(join_date.getFullYear(), 11, 31);
+
+                let difference_in_time = year_end.getTime() - join_date.getTime() + 1;
+                let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
+
+                var prop_leave_grant_date = new Date(join_date.getFullYear()+1, join_date.getMonth()-1, join_date.getDate()-1);
+                var prop_leave_grant_amount = Math.round((difference_in_days) / 365 * 15);
+                var attendance_leaves = 11 - join_date.getMonth();
+                console.log('1년차 월별연차 : ', attendance_leaves);
+                console.log('발생연차 : ', 11 - attendance_leaves);
+
+                document.getElementById("first-year").innerText = `1년차 발생일 : 입사 후 1개월 뒤 선입력`
+                document.getElementById("first-calculate").innerText = ` /  일수 : ${attendance_leaves} (개근연차)`
+
+                document.getElementById("year-end").innerText = `2년차 발생일 : ${join_date.getFullYear()+1}-${join_date.getMonth()+1}-${join_date.getDate()}`
+                document.getElementById("calculate").innerText = ` /  일수 : ${prop_leave_grant_amount} (비례연차)  +   ${11-attendance_leaves} (개근연차, 1/1에 선입력)`
+                                                                
+                document.getElementById("3rd-year-end").innerText = `3년차 발생일 : ${parseInt(year_end.getFullYear()+2)+"-1-1"}`
+                document.getElementById("3rd-calculate").innerText = ` /  일수 : 15`
+
+                document.getElementById("4th-year-end").innerText = `4년차 발생일 : ${parseInt(year_end.getFullYear()+3)+"-1-1"}`
+                document.getElementById("4th-calculate").innerText = ` /  일수 : 16 (이후 매 2년마다 1일 가산)`
+            }
+        </script>
+</body>
+</html>

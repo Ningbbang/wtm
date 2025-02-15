@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=delete_forever" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&icon_names=add" />
+    <style>
+        table, th, td {
+            border: 1px solid;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        td {
+            text-align:center;
+            padding: 0.5rem;
+            height: 15px;
+        }
+    </style>
+    <title>관리자 페이지</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div style="display: flex;">
+                <div class="navbar-brand">WTM</div>
+                <ul class="nav-ul">
+                    <li class="nav-item">
+                        <a href="/index" class="current-page">근무시간
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/leave">연차제도</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/absence">휴직/병가</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-info">
+                <%= name %>
+            </div>
+        </div>
+    </nav>
+
+    <div id="container">
+
+        <h2>Data Tables</h2>
+
+        <form action="/search">
+            <label for="target">조회대상 : </label>
+            <select name="target" id="target" onChange="fetchItem()">
+            </select>
+        </form>
+
+        <h3>Overtime</h3>
+        <table style="margin-top: 1.0rem; margin-bottom:1.0rem;" id="overtime">
+            <tr>
+                <th style="width:6.0rem;">사번</th>
+                <th style="width:4.0rem;">기간</th>
+                <th style="width:4.0rem;">평일연장</th>
+                <th style="width:3.0rem;">휴일</th>
+                <th style="width:3.0rem;">야간</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>
+        </table>
+
+        <h3>Leaves</h3>
+        <table style="margin-bottom:1.0rem;" id="leaves">
+            <tr>
+                <th style="width:6.0rem;">사번</th>
+                <th style="width:6.0rem;">날짜</th>
+                <th style="width:4.0rem;">사용일수</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>
+        </table>
+
+        <h3>Leave Balance</h3>
+        <table style="margin-bottom:1.0rem;" id="balance_leaves">
+            <tr>
+                <th style="width:6.0rem;">사번</th>
+                <th style="width:3.3rem;">발생</th>
+                <th style="width:3.3rem;">사용</th>
+                <th style="width:3.3rem;">잔여</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>
+        </table>
+
+        <h3>Users</h3>
+        <table style="margin-bottom:1.0rem;" id="users">
+            <tr>
+                <th style="width:5.0rem;">ID</th>
+                <th style="width:5.0rem;">Password</th>
+                <th style="width:4.0rem;">Type</th>
+                <th style="width:4.0rem;">Name</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        function setUserData(){
+            let selector = document.getElementById("target");
+            selector.innerHTML += `<option value="all" selected>all</option>`;
+            fetch(`/search`)
+                .then(response => response.json())
+                .then(data => {
+                    let selector = document.getElementById("target");
+                    data.forEach(row => {
+                        selector.innerHTML += `<option value=${row}>${row}</option>`
+                    })
+                });
+
+            fetch('/users')
+            .then(response => response.json())
+            .then(data => {
+                let table = document.getElementById("users");
+                data.forEach(row => {
+                    let tr = document.createElement('tr');
+                    let id = document.createElement("td");
+                    id.innerText = row.id;
+                    id.classList.add('uneditable');
+                
+                    var password = document.createElement("td");
+                    password.innerText = row.password;
+                    password.classList.add('uneditable');
+
+                    var type = document.createElement("td");
+                    type.innerText = row.type;
+                    type.classList.add('uneditable');
+
+                    var name = document.createElement("td");
+                    name.innerText = row.name;
+                    name.classList.add('uneditable');
+
+                    var delete_btn = document.createElement("td");
+                    delete_btn.innerHTML =
+                        `
+                            <td style="padding: 0.2rem;">
+                                <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                    <span onClick="deleteUser('${row.id}')" style="font-size:12px;">삭제</span>
+                                </button>
+                            </td>
+                        `
+
+                    tr.appendChild(id);
+                    tr.appendChild(password);
+                    tr.appendChild(type);
+                    tr.appendChild(name);
+                    tr.appendChild(delete_btn);
+                    table.appendChild(tr);
+                });
+                table.innerHTML += 
+                `
+                <tr>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td style="padding: 0.2rem;">
+                        <button style="width:2.0rem; height:1.7rem; padding:0;">
+                            <span onClick="addItem('users', this)" class="material-symbols-outlined">add</span>
+                        </button>
+                    </td>
+                </tr>
+                `
+            });
+        };
+        setUserData();
+
+        function fetchItem(){
+            let condition = document.getElementById("target").value;
+            let overtime_table = document.getElementById("overtime")
+            let leaves_table = document.getElementById("leaves")
+            let balance_leaves_table = document.getElementById("balance_leaves")
+
+            overtime_table.innerHTML = 
+            `<tr>
+                <th style="width:6.0rem;">사번</th>
+                <th style="width:6.0rem;">기간</th>
+                <th style="width:4.0rem;">평일연장</th>
+                <th style="width:3.0rem;">휴일</th>
+                <th style="width:3.0rem;">야간</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>`
+
+            leaves_table.innerHTML =
+            `<tr>
+                <th style="width:6.0rem;">사번</th>
+                <th style="width:8.0rem;">날짜</th>
+                <th style="width:4.0rem;">사용일수</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>`
+
+            balance_leaves_table.innerHTML = 
+            `<tr>
+                <th style="width:5.0rem;">ID</th>
+                <th style="width:5.0rem;">발생</th>
+                <th style="width:4.0rem;">사용</th>
+                <th style="width:4.0rem;">잔여</th>
+                <th style="width:3.0rem;">비고</th>
+            </tr>`
+
+            fetch(`/overtime/${condition}`)
+                .then(response => response.json())
+                .then(data => {
+                    let table = document.getElementById("overtime");
+                    data.forEach(row => {
+                        let tr = document.createElement('tr');
+                        let code = document.createElement("td");
+                        code.innerText = row.code;
+                        code.classList.add('uneditable');
+                    
+                        var period = document.createElement("td");
+                        period.innerText = row.period;
+                        period.classList.add('uneditable');
+
+                        var wd_ot = document.createElement("td");
+                        wd_ot.innerText = row.wd_ot;
+                        wd_ot.classList.add('uneditable');
+
+                        var wk_ot = document.createElement("td");
+                        wk_ot.innerText = row.wk_ot;
+                        wk_ot.classList.add('uneditable');
+
+                        var nt_ot = document.createElement("td");
+                        nt_ot.innerText = row.nt_ot;
+                        nt_ot.classList.add('uneditable');
+
+                        var delete_btn = document.createElement("td");
+                        delete_btn.innerHTML =
+                            `
+                                <td style="padding: 0.2rem;">
+                                    <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                        <span class="delete-btn" onClick="deleteOvertime('${row.code}', '${row.period}')">삭제</span>
+                                    </button>
+                                </td>
+                            `
+
+                        tr.appendChild(code);
+                        tr.appendChild(period);
+                        tr.appendChild(wd_ot);
+                        tr.appendChild(wk_ot);
+                        tr.appendChild(nt_ot);
+                        tr.appendChild(delete_btn);
+                        table.appendChild(tr);
+                    })
+                    table.innerHTML += 
+                    `
+                    <tr>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td style="padding: 0.2rem;">
+                            <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                <span class="material-symbols-outlined" onClick="addItem('overtime', this)">add</span>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                });
+
+                
+            fetch(`/leaves/${condition}`)
+                .then(response => response.json())
+                .then(data => {
+                    let table = document.getElementById("leaves");
+                    data.forEach(row => {
+                        let tr = document.createElement('tr');
+                        let code = document.createElement("td");
+                        code.innerText = row.code;
+                        code.classList.add('uneditable');
+                    
+                        var date = document.createElement("td");
+                        date.innerText = row.date;
+                        date.classList.add('uneditable');
+
+                        var amt = document.createElement("td");
+                        amt.innerText = row.amt;
+                        amt.classList.add('uneditable');
+
+
+                        var delete_btn = document.createElement("td");
+                        delete_btn.innerHTML =
+                            `
+                                <td style="padding: 0.2rem;">
+                                    <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                        <span class="delete-btn" onClick="deleteLeaves('${row.code}', '${row.date}')">삭제</span>
+                                    </button>
+                                </td>
+                            `
+
+                        tr.appendChild(code);
+                        tr.appendChild(date);
+                        tr.appendChild(amt);
+                        tr.appendChild(delete_btn);
+                        table.appendChild(tr);
+                    });
+                    table.innerHTML += 
+                    `
+                    <tr>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td style="padding: 0.2rem;">
+                            <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                <span class="material-symbols-outlined" onClick="addItem('leaves', this)">add</span>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                });
+
+                
+            fetch(`/balance_leaves/${condition}`)
+                .then(response => response.json())
+                .then(data => {
+                    let table = document.getElementById("balance_leaves");
+                    data.forEach(row => {
+                        let tr = document.createElement('tr');
+                        let code = document.createElement("td");
+                        code.innerText = row.code;
+                        code.classList.add('uneditable');
+                    
+                        var granted = document.createElement("td");
+                        granted.innerText = row.granted;
+                        granted.classList.add('uneditable');
+
+                        var used = document.createElement("td");
+                        used.innerText = row.used;
+                        used.classList.add('uneditable');
+
+                        var remain = document.createElement("td");
+                        remain.innerText = row.remain;
+                        remain.classList.add('uneditable');
+
+                        var delete_btn = document.createElement("td");
+                        delete_btn.innerHTML =
+                            `
+                                <td style="padding: 0.2rem;">
+                                    <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                        <span class="delete-btn" onClick="deleteBalance('${row.code}')">삭제</span>
+                                    </button>
+                                </td>
+                            `
+
+                        tr.appendChild(code);
+                        tr.appendChild(granted);
+                        tr.appendChild(used);
+                        tr.appendChild(remain);
+                        tr.appendChild(delete_btn);
+                        table.appendChild(tr);
+                    });
+                    table.innerHTML += 
+                    `
+                    <tr>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td style="padding: 0.2rem;">
+                            <button style="width:2.0rem; height:1.7rem; padding:0;">
+                                <span class="material-symbols-outlined" onClick="addItem('balance_leaves', this)">add</span>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                });
+
+        };
+        fetchItem('all');
+
+        function addItem(type, element){
+            if (type === "overtime") {
+                let tr = element.parentElement.parentElement.parentElement;
+                const code = tr.children[0].textContent.trim();
+                const period = tr.children[1].textContent.trim();
+                const wd_ot = tr.children[2].textContent.trim();
+                const wk_ot = tr.children[3].textContent.trim();
+                const nt_ot = tr.children[4].textContent.trim();
+                
+                const itemData = {code, period, wd_ot, wk_ot, nt_ot}
+                
+                fetch(`/add/${type}`, {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(itemData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('failed to add item');
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    console.log(message)
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+            if (type === "leaves") {
+                let tr = element.parentElement.parentElement.parentElement;
+                const code = tr.children[0].textContent.trim();
+                const date = tr.children[1].textContent.trim();
+                const amt = tr.children[2].textContent.trim();
+                
+                const itemData = {code, date, amt}
+                
+                fetch(`/add/${type}`, {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(itemData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('failed to add item');
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    console.log(message)
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+            if (type === "balance_leaves") {
+                let tr = element.parentElement.parentElement.parentElement;
+                const code = tr.children[0].textContent.trim();
+                const granted = tr.children[1].textContent.trim();
+                const used = tr.children[2].textContent.trim();
+                const remain = tr.children[3].textContent.trim();
+                
+                const itemData = {code, granted, used, remain}
+                
+                fetch(`/add/${type}`, {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(itemData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('failed to add item');
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    console.log(message)
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            };
+            
+            if (type === "users") {
+                let tr = element.parentElement.parentElement.parentElement;
+                const id = tr.children[0].textContent.trim();
+                const password = tr.children[1].textContent.trim();
+                const user_type = tr.children[2].textContent.trim();
+                const name = tr.children[3].textContent.trim();
+                
+                const itemData = {id, password, user_type, name}
+                console.log(itemData);
+                
+                fetch(`/add/${type}`, {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(itemData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('failed to add user');
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    console.log(message)
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+        };
+
+        function deleteOvertime(code, period){
+            fetch(`/delete/overtime/${code}/${period}`, {
+                method: "DELETE",
+                headers: {"content-Type":"application/json"}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('failed to delete item');
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message)
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        
+        function deleteLeaves(code, date){
+            fetch(`/delete/leaves/${code}/${date}`, {
+                method: "DELETE",
+                headers: {"content-Type":"application/json"}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('failed to delete item');
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message)
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        function deleteBalance(code){
+            fetch(`/delete/balance/${code}`, {
+                method: "DELETE",
+                headers: {"content-Type":"application/json"}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('failed to delete item');
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message)
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        };       
+        
+        function deleteUser(id){
+            fetch(`/delete/user/${id}`, {
+                method: "DELETE",
+                headers: {"content-Type":"application/json"}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('failed to delete user');
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message)
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        };
+    </script>
+</body>
+</html>
