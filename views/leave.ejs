@@ -51,7 +51,7 @@
             <h2 style="margin-bottom: 2.0rem;">연차유급휴가</h2>
             <div class="content-container">
                 <div style="margin-bottom:2.0rem;">
-                    <h3>1. 연차발생 규정</h3>
+                    <h3>1. 연차발생 규정 (2025.2.17 현재 유효)</h3>
                         <table style="border-collapse: collapse;">
                             <tr>
                                 <th>구분</th>
@@ -86,23 +86,62 @@
                 <div style="margin-bottom:2.0rem;">
                     <h3>2. 연차계산기(2~4년차)</h3>
                     <p>입사일 : <input type="date" id="date" onchange="getDate()"></p>
-                    <p>
-                        <span id="first-year">1년차 발생일 : </span>
-                        <span id="first-calculate"></span>
-                    <p>
-                        <span id="year-end">2년차 발생일 : </span>
-                        <span id="calculate"></span>
-                    </p>
-                    <p>
-                        <span id="3rd-year-end">3년차 발생일 : </span>
-                        <span id="3rd-calculate"></span>
-                    </p>
-                    <p>
-                        <span id="4th-year-end">4년차 발생일 : </span>
-                        <span id="4th-calculate"></span>
-                    </p>
-                        <span style="font-size:0.8rem;">※ 개근연차는 제외되었으며 1~2년차에 최대 11일의 개근연차 발생</span>
-                </div>
+
+                    <table style="border-collapse: collapse; margin-bottom: 2.0rem;">
+                        <tr>
+                            <th style="width:4.0rem;">년차</th>
+                            <th style="width:6.0rem;">발생일</th>
+                            <th style="width:4.0rem;">구분</th>
+                            <th style="width:4.0rem;">발생일수</th>
+                            <th style="width:7.0rem;">사용기한</th>
+                            <th style="width:10.0rem;">비고</th>
+                        </tr>
+
+                        <tr>
+                            <td>1년차</td>
+                            <td id="first_al_date"></td>
+                            <td>개근연차</td>
+                            <td id="first_al_amt"></td>
+                            <td>다음해 연말까지</td>
+                            <td>입사 후 1개월 뒤 선입력</td>
+                        </tr>
+
+                        <tr>
+                            <td>2년차</td>
+                            <td id="second_al_date"></td>
+                            <td>개근연차</td>
+                            <td id="second_al_amt"></td>
+                            <td>당해 연말까지</td>
+                            <td>1/1에 모두 선입력</td>
+                        </tr>
+
+                        <tr>
+                            <td>2년차</td>
+                            <td id="proportional_leave_date"></td>
+                            <td>비례연차</td>
+                            <td id="proportional_leave_amt"></td>
+                            <td>당해 연말까지</td>
+                            <td>전년도 근무일수에 비례</td>
+                        </tr>
+
+                        <tr>
+                            <td>3년차</td>
+                            <td id="third_leave_date"></td>
+                            <td>개근연차</td>
+                            <td id="third_leave_amt"></td>
+                            <td>당해 연말까지</td>
+                            <td>-</td>
+                        </tr>
+
+                        <tr>
+                            <td>4년차</td>
+                            <td id="fourth_leave_date"></td>
+                            <td>개근연차</td>
+                            <td id="fourth_leave_amt"></td>
+                            <td>당해 연말까지</td>
+                            <td>이후 매 2년마다 1일 가산</td>
+                        </tr>
+                    </table>
                 
                 <div style="margin-bottom:2.0rem;">
                     <h3>3. 연차사용</h3>
@@ -143,21 +182,23 @@
                 var prop_leave_grant_date = new Date(join_date.getFullYear()+1, join_date.getMonth()-1, join_date.getDate()-1);
                 var prop_leave_grant_amount = Math.round((difference_in_days) / 365 * 15);
                 var attendance_leaves = 11 - join_date.getMonth();
-                console.log('1년차 월별연차 : ', attendance_leaves);
-                console.log('발생연차 : ', 11 - attendance_leaves);
 
-                document.getElementById("first-year").innerText = `1년차 발생일 : 입사 후 1개월 뒤 선입력`
-                document.getElementById("first-calculate").innerText = ` /  일수 : ${attendance_leaves} (개근연차)`
-
-                document.getElementById("year-end").innerText = `2년차 발생일 : ${join_date.getFullYear()+1}-${join_date.getMonth()+1}-${join_date.getDate()}`
-                document.getElementById("calculate").innerText = ` /  일수 : ${prop_leave_grant_amount} (비례연차)  +   ${11-attendance_leaves} (개근연차, 1/1에 선입력)`
-                                                                
-                document.getElementById("3rd-year-end").innerText = `3년차 발생일 : ${parseInt(year_end.getFullYear()+2)+"-1-1"}`
-                document.getElementById("3rd-calculate").innerText = ` /  일수 : 15`
-
-                document.getElementById("4th-year-end").innerText = `4년차 발생일 : ${parseInt(year_end.getFullYear()+3)+"-1-1"}`
-                document.getElementById("4th-calculate").innerText = ` /  일수 : 16 (이후 매 2년마다 1일 가산)`
-            }
+                if (join_date.getMonth()===11) {
+                    document.getElementById("first_al_date").innerText = '-'
+                    document.getElementById("first_al_amt").innerText = '-'
+                } else {
+                    document.getElementById("first_al_date").innerText = `${join_date.getFullYear()}/${join_date.getMonth()+2}/${join_date.getDate()}`
+                    document.getElementById("first_al_amt").innerText = `${attendance_leaves}일`
+                };
+                document.getElementById("second_al_date").innerText = `${parseInt(year_end.getFullYear()+1)+"/1/1"}`
+                document.getElementById("second_al_amt").innerText = `${11-attendance_leaves}일`
+                document.getElementById("proportional_leave_date").innerText = `${join_date.getFullYear()+1}/${join_date.getMonth()+1}/${join_date.getDate()}`
+                document.getElementById("proportional_leave_amt").innerText = `${prop_leave_grant_amount}일`
+                document.getElementById("third_leave_date").innerText = `${parseInt(year_end.getFullYear()+2)+"/1/1"}`
+                document.getElementById("third_leave_amt").innerText = '15일'
+                document.getElementById("fourth_leave_date").innerText = `${parseInt(year_end.getFullYear()+3)+"/1/1"}`
+                document.getElementById("fourth_leave_amt").innerText = '16일'
+            };
         </script>
 </body>
 </html>

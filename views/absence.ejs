@@ -8,6 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+    <style>
+        table, th, td {
+            border: 1px solid;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        td {
+            text-align:center;
+            padding: 0.5rem;
+        }
+    </style>
+
     <title>휴직 및 병가제도</title>
 </head>
 <body>
@@ -35,8 +48,109 @@
         </div>
     </nav>
 
-    <div class="main">
+    <div id="container">
+        <h2>휴직제도</h2>
+        <table style="margin-bottom: 2.0rem;">
+            <tr>
+                <th style="width:5.5rem;">구분</th>
+                <th style="width:7.0rem;">사유</th>
+                <th style="width:5.0rem;">기간</th>
+                <th style="width:6.8rem;">처우</th>
+                <th style="width:6.5rem;">연차산정</th>
+                <th style="width:14.0rem;">비고</th>
+            </tr>
 
+            <tr>
+                <td>개인휴직</td>
+                <td>질병, 입대 등 휴직 필요한 경우</td>
+                <td>최대 6개월</td>
+                <td>최초 3개월 60% / 이후 무급<br>(심의를 통해 전 기간 무급 처리될 수 있음)</td>
+                <td>당해 총 근무일의 20% 초과하여 휴직한 경우<br>근무일수에 비례하여 다음해 연차 발생</td>
+                <td>-</td>
+            </tr>
+
+            <tr>
+                <td>육아휴직</td>
+                <td>만 8세 이하 또는 초2 이하의<br>자녀 돌봄이 필요한 경우</td>
+                <td>자녀당 최대 12개월<br>(특정 요건 충족 시 18개월)</td>
+                <td>전 기간 무급<br>(고용센터에서 급여 지급)</td>
+                <td>정상 발생</td>
+                <td>1) 휴직 기간 고용센터에<br>'육아휴직 급여' 신청 가능<br>
+                    2) 육아기 근로시간 단축 등도 가능<br>
+                    3) 세부 사항은 <a href="https://www.law.go.kr/lsInfoP.do?lsiSeq=265999&efYd=20241022"  style="color:blueviolet;">남녀고용평등법</a> 참고
+                </td>
+            </tr>
+            
+            <tr>
+                <td>가족돌봄휴직</td>
+                <td>가족의 노령, 질병, 부상으로<br>돌봄이 필요한 경우</td>
+                <td>최대 6개월</td>
+                <td>전 기간 무급</td>
+                <td>당해 총 근무일의 20% 초과하여 휴직한 경우<br>근무일수에 비례하여 다음해 연차 발생</td>
+                <td>1) 가족돌봄휴가 사용일수만큼 사용 가능 기간에서 차감<br>
+                    2) 기간은 1년간의 최대 사용기간(1/1~12/31)<br>
+                    3) 세부 사항은 <a href="https://www.law.go.kr/lsInfoP.do?lsiSeq=265999&efYd=20241022" style="color:blueviolet;">남녀고용평등법</a> 참고
+                </td>
+            </tr>
+        </table>
+
+        <h2>기타 휴가제도</h2>
+        <table style="margin-bottom: 2.0rem;">
+            <tr>
+                <th style="width:5.5rem;">구분</th>
+                <th style="width:6.0rem;">사유</th>
+                <th style="width:5.0rem;">기간</th>
+                <th style="width:6.8rem;">처우</th>
+                <th style="width:14.0rem;">비고</th>
+            </tr>
+
+            <tr>
+                <td>병가</td>
+                <td>질병, 부상 등</td>
+                <td>최대 15일 (휴일포함)</td>
+                <td>70% 유급<br>(휴일 포함 일할 계산)</td>
+                <td>1) 시작일~종료일까지 날짜 계산<br>2) 동일 사유에 대해 휴직 또는 병가 선택</td>
+            </tr>
+
+            <tr>
+                <td>가족돌봄휴가</td>
+                <td>가족의 노령, 질병, 부상으로<br>돌봄이 필요한 경우</td>
+                <td>최대 10일 (근무일만)</td>
+                <td>무급</td>
+                <td>1) 사용일수만큼 가족돌봄휴직 사용 기간에서 차감<br>
+                    2) 세부 사항은 <a href="https://www.law.go.kr/lsInfoP.do?lsiSeq=265999&efYd=20241022"  style="color:blueviolet;">남녀고용평등법</a> 참고
+                </td>
+            </tr>
+            
+            <tr>
+                <td>배우자<br>출산휴가</td>
+                <td>배우자가 출산을 앞둔 경우<br>혹은 출산한 때</td>
+                <td>최대 20일 (근무일만)</td>
+                <td>100% 유급</td>
+                <td>-</td>
+            </tr>
+            
+            <tr>
+                <td>경조휴가</td>
+                <td>회갑/칠순/팔순, 결혼, 조의 등</td>
+                <td>사유에 따라<br>상이함</td>
+                <td>100% 유급</td>
+                <td>1) 부서 배치 후 경조규정 참고<br>
+                    2) 원칙적으로 발생일(조의) 혹은 발생월(그 외) 내에 사용<br>
+                    3) 발생월은 등본 상 기재된 날짜 기준(회갑/칠순/팔순)
+                </td>
+            </tr>
+        </table>
+        
+        <div style="margin-bottom:2.0rem;">
+            <h3>※ 담당자</h3>
+            <ul>
+                <li>인사팀 인사G 장재호</li>
+                <li>jangjh1@wonik.com</li>
+                <li>010-8262-2209 / 031-8047-7602</li>
+                <li>평택시 진위산단로75 8층</li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>
